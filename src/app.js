@@ -14,6 +14,7 @@ const books = [
 
 function searchBook(id) {
     const book = books.find(book => book.id === Number(id))
+    console.log("🚀 ~ searchBook ~ book:", book)
     return book
 }
 
