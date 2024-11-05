@@ -7,7 +7,6 @@ app.listen(PORT, () => {
     console.log("Server on 🔥")
 })
 
-
 // import http from 'http'
 
 // const rotas = {
