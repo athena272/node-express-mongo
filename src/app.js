@@ -1,40 +1,20 @@
 import express from 'express'
 import connectDatabase from './config/dbConnect.js';
-const conection = await connectDatabase()
+import { book } from './models/Book.js';
 
+const conection = await connectDatabase()
 conection.on('error', (error) => console.error("Something went wrong 💀\n", error))
 conection.once('open', () => console.log("Connection established 🔥"))
 
 export const app = express()
 app.use(express.json())
-const books = [
-    {
-        id: 1,
-        title: "O Senhor dos Anéis"
-    },
-    {
-        id: 2,
-        title: "O Hobbit"
-    }
-];
-
-function searchBook(id) {
-    const book = books.find(book => book.id === Number(id))
-    console.log("🚀 ~ searchBook ~ book:", book)
-    return book
-}
-
-function searchBookId(id) {
-    const bookId = books.findIndex(books => books.id === Number(id))
-    console.log("🚀 ~ searchBookID ~ bookId:", bookId)
-    return bookId
-}
 
 app.get('/', (req, res) => {
     res.status(200).send("Curso de Node.js")
 })
 
-app.get('/books', (req, res) => {
+app.get('/books', async (req, res) => {
+    const books = await book.find({})
     res.status(200).json(books)
 })
 
