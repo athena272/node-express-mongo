@@ -17,7 +17,7 @@ function searchBook(id) {
     return book
 }
 
-function searchBookID(id) {
+function searchBookId(id) {
     const bookId = books.findIndex(books => books.id === Number(id))
     console.log("🚀 ~ searchBookID ~ bookId:", bookId)
     return bookId
@@ -47,10 +47,21 @@ app.post('/books', (req, res) => {
 })
 
 app.put('/books/:id', (req, res) => {
-    const bookID = searchBookID(req.params.id)
-    if (bookID) {
-        books[bookID].title = req.body
+    const bookId = searchBookId(req.params.id)
+    if (bookId) {
+        books[bookId].title = req.body
         res.status(200).send("Updated book successfully")
+    }
+    else {
+        res.status(404).json({ "message": "Book not found" })
+    }
+})
+
+app.delete('/books/:id', (req, res) => {
+    const bookId = searchBookId(req.params.id)
+    if (bookId) {
+        books.splice(bookId, 1)
+        res.status(200).send("Deleted book successfully")
     }
     else {
         res.status(404).json({ "message": "Book not found" })
