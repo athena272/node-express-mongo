@@ -8,3 +8,7 @@ conection.once('open', () => console.log("Connection established 🔥"))
 
 export const app = express()
 routes(app)
+
+// app.use((error, req, res, next) => {
+
+// })
