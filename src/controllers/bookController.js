@@ -32,8 +32,8 @@ export default class BookController {
     }
 
     static async store(req, res) {
-        const reqBook = req.body
         try {
+            const reqBook = req.body
             const authorFound = await author.findById(reqBook.author)
             const fullBook = { ...reqBook, author: { ...authorFound._doc } }
             const newBook = await book.create(fullBook)
@@ -68,6 +68,20 @@ export default class BookController {
             return res.status(404).json({ "message": "Book not found" })
         } catch (error) {
             res.status(500).json({ message: `${error.message} - request failed` })
+        }
+    }
+
+    static async searchBookByPublisher(req, res) {
+        try {
+            const publisher = req.query.publisher
+            const booksByPublisher = await book.find({ publisher })
+            if (booksByPublisher) {
+                return res.status(200).json(booksByPublisher)
+            }
+
+            return res.status(404).json({ "message": "Books not found" })
+        } catch (error) {
+
         }
     }
 }
