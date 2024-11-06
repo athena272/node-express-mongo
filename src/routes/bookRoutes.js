@@ -1,5 +1,5 @@
 import { Router } from 'express'
-import BookController from '../controllers/bookController.js'
+import BookController from '../controllers/BookController.js'
 export const bookRouter = Router()
 
 bookRouter.get('/books', BookController.index)
