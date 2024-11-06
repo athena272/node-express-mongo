@@ -1,3 +1,4 @@
+import { author } from '../models/Author.js'
 import { book } from '../models/Book.js'
 
 // Singleton instance
@@ -31,8 +32,11 @@ export default class BookController {
     }
 
     static async store(req, res) {
+        const reqBook = req.body
         try {
-            const newBook = await book.create(req.body)
+            const authorFound = await author.findById(reqBook.author)
+            const fullBook = { ...reqBook, author: { ...authorFound._doc } }
+            const newBook = await book.create(fullBook)
             return res.status(201).json({ message: "Add book successfully", newBook })
         } catch (error) {
             return res.status(500).json({ message: `${error.message} - request failed` })
