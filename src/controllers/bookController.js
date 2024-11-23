@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { author } from '../models/Author.js'
 import { book } from '../models/Book.js'
 
@@ -27,6 +28,10 @@ export default class BookController {
 
             return res.status(404).json({ "message": "Book not found" })
         } catch (error) {
+            if (error instanceof mongoose.Error.CastError) {
+                return res.status(400).json({ "message": "Bad request" })
+            }
+
             return res.status(500).json({ message: `${error.message} - request failed` })
         }
     }
