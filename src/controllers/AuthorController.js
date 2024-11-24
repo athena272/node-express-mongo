@@ -2,7 +2,7 @@ import { author } from "../models/Author.js";
 
 export default class AuthorController {
     // List all registers
-    static async index(req, res) {
+    static async index(req, res, next) {
         try {
             const authors = await author.find({})
             if (authors) {
@@ -11,11 +11,11 @@ export default class AuthorController {
 
             return res.status(404).json({ "message": "Authors not found" })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async show(req, res) {
+    static async show(req, res, next) {
         try {
             const id = req.params.id
             const authorFound = await author.findById(id)
@@ -25,20 +25,20 @@ export default class AuthorController {
 
             return res.status(404).json({ "message": "Author not found" })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async store(req, res) {
+    static async store(req, res, next) {
         try {
             const newAuthor = await author.create(req.body)
             return res.status(201).json({ message: "Add author successfully", newAuthor })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async update(req, res) {
+    static async update(req, res, next) {
         try {
             const id = req.params.id
             const authorFound = await author.findByIdAndUpdate(id, req.body)
@@ -48,7 +48,7 @@ export default class AuthorController {
 
             return res.status(404).json({ "message": "Author not found" })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
@@ -62,7 +62,7 @@ export default class AuthorController {
 
             return res.status(404).json({ "message": "Author not found" })
         } catch (error) {
-            res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 }

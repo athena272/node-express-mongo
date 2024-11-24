@@ -4,7 +4,7 @@ import { book } from '../models/Book.js'
 // Singleton instance
 export default class BookController {
     // List all registers
-    static async index(req, res) {
+    static async index(req, res, next) {
         try {
             const books = await book.find({})
             if (books) {
@@ -13,11 +13,11 @@ export default class BookController {
 
             return res.status(404).json({ "message": "Books not found" })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async show(req, res) {
+    static async show(req, res, next) {
         try {
             const id = req.params.id
             const bookFound = await book.findById(id)
@@ -27,11 +27,11 @@ export default class BookController {
 
             return res.status(404).json({ "message": "Book not found" })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async store(req, res) {
+    static async store(req, res, next) {
         try {
             const reqBook = req.body
             const authorFound = await author.findById(reqBook.author)
@@ -39,11 +39,11 @@ export default class BookController {
             const newBook = await book.create(fullBook)
             return res.status(201).json({ message: "Add book successfully", newBook })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async update(req, res) {
+    static async update(req, res, next) {
         try {
             const id = req.params.id
             const bookFound = await book.findByIdAndUpdate(id, req.body)
@@ -53,11 +53,11 @@ export default class BookController {
 
             return res.status(404).json({ "message": "Book not found" })
         } catch (error) {
-            return res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async delete(req, res) {
+    static async delete(req, res, next) {
         try {
             const id = req.params.id
             const bookFound = await book.findByIdAndDelete(id)
@@ -67,11 +67,11 @@ export default class BookController {
 
             return res.status(404).json({ "message": "Book not found" })
         } catch (error) {
-            res.status(500).json({ message: `${error.message} - request failed` })
+            next(error)
         }
     }
 
-    static async searchBookByPublisher(req, res) {
+    static async searchBookByPublisher(req, res, next) {
         try {
             const publisher = req.query.publisher
             const booksByPublisher = await book.find({ publisher })
@@ -81,7 +81,7 @@ export default class BookController {
 
             return res.status(404).json({ "message": "Books not found" })
         } catch (error) {
-
+            next(error)
         }
     }
 }
