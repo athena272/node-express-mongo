@@ -12,8 +12,5 @@ export function errorManipulator(error, req, res, next) {
        new ValidationInputsError(error).sendResponse(res)
     }
 
-    new BaseError({
-        message: 'Internal Server Error: An unexpected error occurred. Please try again later.',
-        status: 500,
-    }).sendResponse(res)
+    new BaseError().sendResponse(res)
 }
