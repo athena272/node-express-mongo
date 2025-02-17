@@ -33,13 +33,27 @@ export default class BookController {
 
     static async store(req, res, next) {
         try {
-            const reqBook = req.body
-            const authorFound = await author.findById(reqBook.author)
-            const fullBook = { ...reqBook, author: { ...authorFound._doc } }
-            const newBook = await book.create(fullBook)
-            return res.status(201).json({ message: "Add book successfully", newBook })
+            const reqBook = req.body;
+
+            // Verifica se o campo "author" foi enviado na requisição
+            if (!reqBook.author) {
+                return res.status(400).json({ message: "Book's author is required" });
+            }
+
+            // Busca o autor no banco de dados
+            const authorFound = await author.findById(reqBook.author);
+
+            // Se o autor não for encontrado, retorna um erro
+            if (!authorFound) {
+                return res.status(400).json({ message: "Invalid author: Author not found" });
+            }
+
+            // Cria o livro associando o ObjectId do autor
+            const newBook = await book.create(reqBook);
+            return res.status(201).json({ message: "Book added successfully", newBook });
+
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
