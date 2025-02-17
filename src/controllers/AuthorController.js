@@ -1,4 +1,5 @@
 import { author } from "../models/Author.js";
+import NotFound from "../errors/NotFound.js";
 
 export default class AuthorController {
     // List all registers
@@ -9,7 +10,7 @@ export default class AuthorController {
                 return res.status(200).json(authors)
             }
 
-            return res.status(404).json({ "message": "Authors not found" })
+            next(new NotFound('Authors not found'))
         } catch (error) {
             next(error)
         }
@@ -23,7 +24,7 @@ export default class AuthorController {
                 return res.status(200).json(authorFound)
             }
 
-            return res.status(404).json({ "message": "Author not found" })
+            next(new NotFound('Author not found'))
         } catch (error) {
             next(error)
         }
@@ -46,13 +47,13 @@ export default class AuthorController {
                 return res.status(201).json({ message: "Updated author successfully", bookFound })
             }
 
-            return res.status(404).json({ "message": "Author not found" })
+            next(new NotFound('Author not found'))
         } catch (error) {
             next(error)
         }
     }
 
-    static async delete(req, res) {
+    static async delete(req, res, next) {
         try {
             const id = req.params.id
             const authorFound = await author.findByIdAndDelete(id)
@@ -60,7 +61,7 @@ export default class AuthorController {
                 return res.status(201).json({ message: "Deleted author successfully", authorFound })
             }
 
-            return res.status(404).json({ "message": "Author not found" })
+            next(new NotFound('Author not found'))
         } catch (error) {
             next(error)
         }
