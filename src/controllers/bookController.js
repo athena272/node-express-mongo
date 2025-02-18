@@ -1,6 +1,5 @@
 import NotFound from '../errors/NotFound.js'
-import { author } from '../models/Author.js'
-import { book } from '../models/Book.js'
+import { author, book } from "../models/index.js";
 
 // Singleton instance
 export default class BookController {
@@ -78,6 +77,24 @@ export default class BookController {
             const bookFound = await book.findByIdAndDelete(id)
             if (bookFound) {
                 return res.status(201).json({ message: "Deleted book successfully", bookFound })
+            }
+
+            next(new NotFound("Book not found"))
+        } catch (error) {
+            next(error)
+        }
+    }
+
+    static async searchBookByFilter(req, res, next) {
+        try {
+            const { title, publisher } = req.query
+            const search = {}
+            if (publisher) search.publisher = publisher
+            if (title) search.title = title
+
+            const booksFound = await book.find(search)
+            if (booksFound.length > 0) {
+                return res.status(200).json(booksFound)
             }
 
             next(new NotFound("Book not found"))
