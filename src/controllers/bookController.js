@@ -1,5 +1,6 @@
 import NotFound from '../errors/NotFound.js'
-import { author, book } from "../models/index.js";
+import { author, book } from "../models/index.js"
+import { procesSearch } from '../helper/index.js'
 
 // Singleton instance
 export default class BookController {
@@ -87,10 +88,7 @@ export default class BookController {
 
     static async searchBookByFilter(req, res, next) {
         try {
-            const { title, publisher } = req.query
-            const search = {}
-            if (publisher) search.publisher = publisher
-            if (title) search.title = title
+            const search = procesSearch(req)
 
             const booksFound = await book.find(search)
             if (booksFound.length > 0) {
