@@ -10,3 +10,11 @@
 - 🔗 Book-Author Relationship using Mongoose (ObjectId).
 - 🛠 Centralized Error Handling with custom middlewares.
 - 📜 Database Persistence with MongoDB Atlas or a local instance.
+
+## 🚀 Tech Stack
+
+- Node.js + Express.js
+- MongoDB + Mongoose
+- Dotenv for environment configuration
+- Postman for API testing
+- Git & GitHub for version control
