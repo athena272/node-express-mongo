@@ -1,3 +1,4 @@
+import NotFound from '../errors/NotFound.js'
 import { author } from '../models/Author.js'
 import { book } from '../models/Book.js'
 
@@ -11,7 +12,7 @@ export default class BookController {
                 return res.status(200).json(books)
             }
 
-            return res.status(404).json({ "message": "Books not found" })
+            next(new NotFound("Books not found"))
         } catch (error) {
             next(error)
         }
@@ -25,7 +26,7 @@ export default class BookController {
                 return res.status(200).json(bookFound)
             }
 
-            return res.status(404).json({ "message": "Book not found" })
+            next(new NotFound("Book not found"))
         } catch (error) {
             next(error)
         }
@@ -65,7 +66,7 @@ export default class BookController {
                 return res.status(201).json({ message: "Updated book successfully", bookFound })
             }
 
-            return res.status(404).json({ "message": "Book not found" })
+            next(new NotFound("Book not found"))
         } catch (error) {
             next(error)
         }
@@ -79,7 +80,7 @@ export default class BookController {
                 return res.status(201).json({ message: "Deleted book successfully", bookFound })
             }
 
-            return res.status(404).json({ "message": "Book not found" })
+            next(new NotFound("Book not found"))
         } catch (error) {
             next(error)
         }
@@ -89,11 +90,11 @@ export default class BookController {
         try {
             const publisher = req.query.publisher
             const booksByPublisher = await book.find({ publisher })
-            if (booksByPublisher) {
+            if (booksByPublisher && booksByPublisher.length > 0) {
                 return res.status(200).json(booksByPublisher)
             }
 
-            return res.status(404).json({ "message": "Books not found" })
+            next(new NotFound("Book not found"))
         } catch (error) {
             next(error)
         }
