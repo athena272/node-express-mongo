@@ -7,12 +7,21 @@ const bookSchema = new mongoose.Schema({
         type: String, 
         required: [true, "Book's title is required"] 
     },
-    publisher: { type: String },
+    publisher: { 
+        type: String,
+        required: [true, "Book's publisher is required"]
+    },
     price: { 
         type: Number, 
-        required: [true, "Book's price is required"]
+        required: [true, "Book's price is required"],
+        min: 5,
+        max: 500
     },
-    number_pages: { type: Number },
+    number_pages: { 
+        type: Number,
+        min: 10,
+        max: 5000
+    },
     author: {
         type: mongoose.Schema.Types.ObjectId, 
         ref: "authors",
