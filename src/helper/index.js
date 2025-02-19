@@ -1,4 +1,6 @@
-export function procesSearch(req) {
+import { author } from "../models/index.js"
+
+export async function procesSearch(req) {
     const { title, publisher, maxPages, minPages, authorName } = req.query
     // const regex = new RegExp(title,  "i")
     // if (title) search.title = regex
@@ -13,8 +15,11 @@ export function procesSearch(req) {
     // let = less than or equal
     if (maxPages) search.number_pages.$lte = maxPages
 
-    if (authorName)  {
-        
+    if (authorName) {
+        const authorFound = await author.findOne({ name: authorName })
+        const authorId = authorFound._id
+
+        search.author = authorId
     }
 
     return search
