@@ -8,13 +8,16 @@ export default class BookController {
     // List all registers
     static async index(req, res, next) {
         try {
-            let { limit = 5, page = 1 } = req.query
+            let { limit = 5, page = 1, sorting = "_id:-1" } = req.query
+
+            let [fieldSorting, sort] = sorting.split(":")
             limit = parseInt(limit)
             page = parseInt(page)
+            sort = parseInt(sort)
 
-            if (limit > 0 && page > 0) {
+            if (limit > 0 && page > 0 && sort > 0) {
                 const books = await book.find({})
-                    .sort({ title: 1 })
+                    .sort({ [fieldSorting]: sort })
                     .skip((page - 1) * limit)
                     .limit(limit)
                     .populate("author")
