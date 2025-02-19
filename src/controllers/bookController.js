@@ -1,18 +1,36 @@
 import NotFound from '../errors/NotFound.js'
 import { author, book } from "../models/index.js"
 import { procesSearch } from '../helper/index.js'
+import InvalidRequest from '../errors/InvalidRequest.js'
 
 // Singleton instance
 export default class BookController {
     // List all registers
     static async index(req, res, next) {
         try {
-            const books = await book.find({})
-            if (books) {
-                return res.status(200).json(books)
+            let { limit = 5, page = 1, sorting = "_id:-1" } = req.query
+
+            let [fieldSorting, sort] = sorting.split(":")
+            limit = parseInt(limit)
+            page = parseInt(page)
+            sort = parseInt(sort)
+
+            if (limit > 0 && page > 0 && sort > 0) {
+                const books = await book.find({})
+                    .sort({ [fieldSorting]: sort })
+                    .skip((page - 1) * limit)
+                    .limit(limit)
+                    .populate("author")
+                    .exec()
+
+                if (books) {
+                    return res.status(200).json(books)
+                }
+
+                next(new NotFound("Books not found"))
             }
 
-            next(new NotFound("Books not found"))
+            next(new InvalidRequest())
         } catch (error) {
             next(error)
         }
@@ -89,10 +107,11 @@ export default class BookController {
     static async searchBookByFilter(req, res, next) {
         try {
             const search = await procesSearch(req)
-
-            const booksFound = await book.find(search)
-            if (booksFound.length > 0) {
-                return res.status(200).json(booksFound)
+            if (search) {
+                const booksFound = await book.find(search).populate('author')
+                if (booksFound.length > 0) {
+                    return res.status(200).json(booksFound)
+                }
             }
 
             next(new NotFound("Book not found"))

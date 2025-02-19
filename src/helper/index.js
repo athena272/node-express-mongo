@@ -5,7 +5,7 @@ export async function procesSearch(req) {
     // const regex = new RegExp(title,  "i")
     // if (title) search.title = regex
 
-    const search = {}
+    let search = {}
     if (publisher) search.publisher = publisher
     if (title) search.title = { $regex: title, $options: "i" }
 
@@ -17,9 +17,11 @@ export async function procesSearch(req) {
 
     if (authorName) {
         const authorFound = await author.findOne({ name: authorName })
-        const authorId = authorFound._id
+        if (authorFound) {
+            search.author = authorFound._id
+        }
 
-        search.author = authorId
+        search = null
     }
 
     return search
