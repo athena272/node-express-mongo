@@ -88,7 +88,7 @@ export default class BookController {
 
     static async searchBookByFilter(req, res, next) {
         try {
-            const search = procesSearch(req)
+            const search = await procesSearch(req)
 
             const booksFound = await book.find(search)
             if (booksFound.length > 0) {
