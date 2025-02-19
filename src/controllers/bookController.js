@@ -14,6 +14,7 @@ export default class BookController {
 
             if (limit > 0 && page > 0) {
                 const books = await book.find({})
+                    .sort({ title: 1 })
                     .skip((page - 1) * limit)
                     .limit(limit)
                     .populate("author")
