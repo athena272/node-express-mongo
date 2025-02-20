@@ -20,6 +20,9 @@ importers:
       mongoose:
         specifier: 7.3.4
         version: 7.3.4
+      mongoose-autopopulate:
+        specifier: ^1.1.0
+        version: 1.1.0(mongoose@7.3.4)
       nodemon:
         specifier: ^3.0.1
         version: 3.0.1
@@ -192,7 +195,7 @@ packages:
     engines: {node: '>= 0.6'}
 
   fsevents@2.3.3:
-    resolution: {integrity: sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==}
+    resolution: {integrity: sha1-ysZAd4XQNnWipeGlMFxpezR9kNY=}
     engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
     os: [darwin]
 
@@ -352,6 +355,11 @@ packages:
       socks:
         optional: true
 
+  mongoose-autopopulate@1.1.0:
+    resolution: {integrity: sha1-bIm6oqWz+cBKaNZagPhcD8VsIic=}
+    peerDependencies:
+      mongoose: 6.x || 7.x || 8.0.0-rc0 || 8.x
+
   mongoose@7.3.4:
     resolution: {integrity: sha512-luvv4PKFiFYaHNn5wGIRrMML3Vvoa8lkdhcLE1S/6gY9s9CUOdEu9olbDrkhvnwRQ20j1SrQFO5JEApW0xwL3w==}
     engines: {node: '>=14.20.1'}
@@ -436,7 +444,7 @@ packages:
     resolution: {integrity: sha512-YZo3K82SD7Riyi0E1EQPojLz7kpepnSQI9IyPbHHg1XXXevb5dJI7tpyN2ADxGcQbHG7vcyRHk0cbwqcQriUtg==}
 
   saslprep@1.0.3:
-    resolution: {integrity: sha512-/MY/PEMbk2SuY5sScONwhUDsV2p77Znkb/q3nSVstq/yQzYJOH/Azh29p9oJLsl3LnQwSvZDKagDGBsBwSooag==}
+    resolution: {integrity: sha1-TAL5RrVs9UKX40e6EJPnrKxM8iY=}
     engines: {node: '>=6'}
 
   semver@7.6.3:
@@ -862,6 +870,10 @@ snapshots:
       mongodb-connection-string-url: 3.0.1
     optionalDependencies:
       socks: 2.8.3
+
+  mongoose-autopopulate@1.1.0(mongoose@7.3.4):
+    dependencies:
+      mongoose: 7.3.4
 
   mongoose@7.3.4:
     dependencies:
