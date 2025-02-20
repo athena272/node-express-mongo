@@ -36,5 +36,5 @@ const bookSchema = new mongoose.Schema({
     }
 }, { versionKey: false })
 
-export const book = mongoose.model('books', bookSchema)
 bookSchema.plugin(autopopulate)
+export const book = mongoose.model('books', bookSchema)
