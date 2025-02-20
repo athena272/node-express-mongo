@@ -20,7 +20,6 @@ export default async function pagination(req, res, next) {
             .sort({ [fieldSorting]: sort })
             .skip((page - 1) * limit)
             .limit(limit)
-            .populate("author")
             .exec();
 
         console.log("🚀 ~ pagination ~ paginationResult:", paginationResult);
