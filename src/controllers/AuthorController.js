@@ -5,9 +5,10 @@ export default class AuthorController {
     // List all registers
     static async index(req, res, next) {
         try {
-            const authors = await author.find({})
+            const authors = author.find()
             if (authors) {
-                return res.status(200).json(authors)
+                req.result = authors
+                return next()
             }
 
             next(new NotFound('Authors not found'))
