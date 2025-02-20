@@ -94,9 +94,9 @@ export default class BookController {
                 return next(new NotFound("Book not found"));
             }
     
-            console.log("🚀 ~ searchBookByFilter ~ search:", search); // Log para depuração
+            console.log("🚀 ~ searchBookByFilter ~ search:", search) // Log para depuração
     
-            req.result = book.find(search).populate("author"); // ✅ Passa o Query Object
+            req.result = book.find(search) // ✅ Passa o Query Object
             next();
         } catch (error) {
             next(error);
