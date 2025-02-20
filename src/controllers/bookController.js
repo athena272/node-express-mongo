@@ -1,36 +1,17 @@
 import NotFound from '../errors/NotFound.js'
 import { author, book } from "../models/index.js"
-import { procesSearch } from '../helper/index.js'
-import InvalidRequest from '../errors/InvalidRequest.js'
+import { processSearch } from '../helper/index.js'
 
 // Singleton instance
 export default class BookController {
     // List all registers
     static async index(req, res, next) {
         try {
-            let { limit = 5, page = 1, sorting = "_id:-1" } = req.query
+            const searchBooks = book.find()
 
-            let [fieldSorting, sort] = sorting.split(":")
-            limit = parseInt(limit)
-            page = parseInt(page)
-            sort = parseInt(sort)
+            req.result = searchBooks
 
-            if (limit > 0 && page > 0 && sort > 0) {
-                const books = await book.find({})
-                    .sort({ [fieldSorting]: sort })
-                    .skip((page - 1) * limit)
-                    .limit(limit)
-                    .populate("author")
-                    .exec()
-
-                if (books) {
-                    return res.status(200).json(books)
-                }
-
-                next(new NotFound("Books not found"))
-            }
-
-            next(new InvalidRequest())
+            next()
         } catch (error) {
             next(error)
         }
@@ -106,17 +87,19 @@ export default class BookController {
 
     static async searchBookByFilter(req, res, next) {
         try {
-            const search = await procesSearch(req)
-            if (search) {
-                const booksFound = await book.find(search).populate('author')
-                if (booksFound.length > 0) {
-                    return res.status(200).json(booksFound)
-                }
+            const search = await processSearch(req);
+    
+            // 🚨 Se a busca não retornou parâmetros válidos, não continue
+            if (!search || Object.keys(search).length === 0) {
+                return next(new NotFound("Book not found"));
             }
-
-            next(new NotFound("Book not found"))
+    
+            console.log("🚀 ~ searchBookByFilter ~ search:", search); // Log para depuração
+    
+            req.result = book.find(search).populate("author"); // ✅ Passa o Query Object
+            next();
         } catch (error) {
-            next(error)
+            next(error);
         }
     }
 
